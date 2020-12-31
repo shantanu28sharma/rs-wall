@@ -7,8 +7,7 @@ pub struct Linear {
     color1: String,
     color2: String,
     w: u32,
-    h: u32,
-    outline: String
+    h: u32
 }
 
 impl Linear {
@@ -19,15 +18,13 @@ impl Linear {
             color1: args[2].to_owned(),
             color2: args[3].to_owned(),
             w: 500,
-            h: 500,
-            outline: args[4].to_owned()
+            h: 500
         }
     }
     pub fn process(&self){
         let mut img = RgbImage::new(self.w, self.h);
         let color1 = Color::hex(&self.color1).unwrap();
         let color2 = Color::hex(&self.color2).unwrap();
-        let outline = Color::hex(&self.outline).unwrap();
         let grad = Gradient::new(vec![
             LinSrgb::new((color1.r as f32)/255.0, (color1.g as f32)/255.0, (color1.b as f32)/255.0),
             LinSrgb::new((color2.r as f32)/255.0, (color2.g as f32)/255.0, (color2.b as f32)/255.0)
