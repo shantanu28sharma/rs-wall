@@ -1,5 +1,5 @@
-use palette::{FromColor, Hsv, IntoColor, Lab, LinSrgb, Pixel, Shade, Srgb, Gradient};
-use image::{GenericImage, GenericImageView, RgbImage};
+use palette::{LinSrgb, Pixel, Srgb, Gradient};
+use image::{RgbImage};
 use raster::Color;
 
 pub struct Linear {
@@ -7,7 +7,8 @@ pub struct Linear {
     color1: String,
     color2: String,
     w: u32,
-    h: u32
+    h: u32,
+    outline: String
 }
 
 impl Linear {
@@ -17,14 +18,16 @@ impl Linear {
             div: args[1].parse().unwrap(),
             color1: args[2].to_owned(),
             color2: args[3].to_owned(),
-            w: args[4].parse().unwrap(),
-            h: args[5].parse().unwrap()
+            w: 500,
+            h: 500,
+            outline: args[4].to_owned()
         }
     }
     pub fn process(&self){
         let mut img = RgbImage::new(self.w, self.h);
         let color1 = Color::hex(&self.color1).unwrap();
         let color2 = Color::hex(&self.color2).unwrap();
+        let outline = Color::hex(&self.outline).unwrap();
         let grad = Gradient::new(vec![
             LinSrgb::new((color1.r as f32)/255.0, (color1.g as f32)/255.0, (color1.b as f32)/255.0),
             LinSrgb::new((color2.r as f32)/255.0, (color2.g as f32)/255.0, (color2.b as f32)/255.0)
@@ -37,6 +40,10 @@ impl Linear {
         for x in 0..w {
             for y in 0..h {
                 let pixel = img.get_pixel_mut(x, y);
+                if x%(w/self.div) == w/self.div-1 || y%(h/self.div) == h/self.div-1 {
+                    *pixel = image::Rgb([0, 0, 0]);
+                    continue;
+                }
                 *pixel = image::Rgb([(col[0] *255.0) as u8, (col[1] *255.0) as u8, (col[2] *255.0) as u8]);
             }
             if (x+1)%(w/self.div) == 0 {
