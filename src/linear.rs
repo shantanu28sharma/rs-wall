@@ -1,6 +1,7 @@
 use palette::{LinSrgb, Pixel, Srgb, Gradient};
 use image::{RgbImage};
 use raster::Color;
+// use algo;
 
 pub struct Linear {
     div: u32,
@@ -21,7 +22,7 @@ impl Linear {
             h: 500
         }
     }
-    pub fn process(&self){
+    pub fn process(&self) -> image::RgbImage{
         let mut img = RgbImage::new(self.w, self.h);
         let color1 = Color::hex(&self.color1).unwrap();
         let color2 = Color::hex(&self.color2).unwrap();
@@ -53,11 +54,14 @@ impl Linear {
                 }
             }
         }
+
+        return img;
+
         
-        let _ = std::fs::create_dir("example-data/output");
-        match img.save("example-data/output/shade.png") {
-            Ok(()) => println!("see 'example-data/output/shade.png' for the result"),
-            Err(e) => println!("failed to write 'example-data/output/shade.png': {}", e),
-        }
+        // let _ = std::fs::create_dir("example-data/output");
+        // match img.save("example-data/output/shade.png") {
+        //     Ok(()) => println!("see 'example-data/output/shade.png' for the result"),
+        //     Err(e) => println!("failed to write 'example-data/output/shade.png': {}", e),
+        // }
     }
 }
